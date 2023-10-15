@@ -52,5 +52,5 @@ jobs:
         with:
           app-name: 'AfifBENR'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_254E11F0F8BC47BE970AE375A51C825A }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3411D816FC6B40F29DABC0C4E71687EA }}
           package: .
