@@ -32,15 +32,46 @@ async function run() {
 run().catch(console.dir);
 
 
-app.post('/register', (req, res) => {
+app.get('/register', (req, res) => {
+  client.db("AfifBENR").collection("users").insertOne
+    (
+      {
+        "username": req.body.username,
+        "password": req.body.password
+      }
+    );
+  res.send("HELLO WORLD")
+})
 
-    client.db("AfifBENR").collection("users").insertOne(
-        {
+app.post('/register', (req, res) => {
+  client.db("AfifBENR").collection("users").find
+    ({
+      "username": { $eq: req.body.username }
+    }).toArray().then((result) => {
+      if (result.lenght > 0) {
+        res.status(400).send('username already exists')
+      } else {
+        client.db("AfifBENR").collection("users").insertOne(
+          {
             "username": req.body.username,
             "password": req.body.password
-        }
-    );
-});
+          });
+        res.send('register successfully')
+      }
+    });
+})
+
+app.patch('/profile', (req, res) => {
+  client.db("AfifBENR").collection("users").updateOne(
+    {
+      "username": { $eq: req.body.username }
+    },{
+      $set: {
+        "email":req.body.email },
+      }).then(result => {
+        res.send('Update Successfully')
+      })
+})
 
 /*app.post('/login', (req, res) => {
     console.log(req.body.username, req.body.password)
@@ -59,12 +90,12 @@ app.post('/register', (req, res) => {
 
 //Efficient way
 app.post('/login', (req, res) => {
-    if(req.body.username != 'saya' || req.body.password != '123'){
-        return res.status(400).send('Invalid User or Password')
-    }
-    res.send('login successfully')
+  if (req.body.username != 'saya' || req.body.password != '123') {
+    return res.status(400).send('Invalid User or Password')
+  }
+  res.send('login successfully')
 })
 
 app.listen(port, () => {
- console.log(`Example app listening on port ${port}`)
+  console.log(`Example app listening on port ${port}`)
 })
