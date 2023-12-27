@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000;
+const bcrypt = require('bcrypt');
 app.use(express.json())
 
 //Paste from MongoDB
@@ -43,7 +44,7 @@ app.get('/register', (req, res) => {
   res.send("HELLO WORLD")
 })
 
-app.post('/register', (req, res) => {
+/*app.post('/register', (req, res) => {
   client.db("AfifBENR").collection("users").find
     ({
       "username": { $eq: req.body.username }
@@ -59,6 +60,16 @@ app.post('/register', (req, res) => {
         res.send('register successfully')
       }
     });
+})*/
+
+app.post('/register', (req, res) => {
+  const { username, password } = req.body;
+  console.log(username, password);
+
+  const hash = bcrypt.hashSync(123, 10);
+  //client.db('AfifBENR').collection('users')
+  //.insertOne({"username": username, "password":password});
+  res.send('login successful')
 })
 
 app.patch('/profile', (req, res) => {
@@ -99,3 +110,4 @@ app.post('/login', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
