@@ -62,14 +62,17 @@ app.get('/register', (req, res) => {
     });
 })*/
 
+//Hash 1
 app.post('/register', (req, res) => {
   const { username, password } = req.body;
   console.log(username, password);
 
-  const hash = bcrypt.hashSync(123, 10);
-  //client.db('AfifBENR').collection('users')
-  //.insertOne({"username": username, "password":password});
+  const hash = bcrypt.hashSync(password, 10);
+  client.db('AfifBENR').collection('users')
+  .insertOne({"username": username, "password":password});
+
   res.send('login successful')
+  console.log(hash)
 })
 
 app.patch('/profile', (req, res) => {
@@ -100,7 +103,7 @@ app.patch('/profile', (req, res) => {
 })*/
 
 //Efficient way
-app.post('/login', (req, res) => {
+/*app.post('/login', (req, res) => {
   if (req.body.username != 'saya' || req.body.password != '123') {
     return res.status(400).send('Invalid User or Password')
   }
@@ -109,5 +112,23 @@ app.post('/login', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
+})*/
+
+//Hash 2
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  console.log(username, password);
+
+  client.db('AfifBENR').collection('users').findOne({"username": username}).then((user) => {
+
+    if(bcrypt.compareSync(password, user.password) == true){
+      res.send("login succes");
+    } else {
+      res.send("login failed")
+    }
+  })
 })
 
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
