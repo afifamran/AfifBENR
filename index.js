@@ -44,6 +44,40 @@ app.get('/register', (req, res) => {
   res.send("HELLO WORLD")
 })
 
+app.get('/student', async (req, res) => {
+  console.log(req.headers.authorization)
+  const token = req.headers.authorization.split(' ')
+  console.log(tokens)
+  
+  jwt.verify(token[1], 'very-strong-password', function (err, decode) {
+    if(err){
+      res.status(401).send('Invalid token')
+    }
+
+    if(decoded.role == 'student'){
+      client.db('assign').collection("student").findOne({username: decoded.user})
+    }
+
+    if(decoded.role == 'lecturer'){
+      client.db('assign').collection("student").find({})
+    }
+  });
+  
+  console.log(err)
+  console.log(decode)
+});
+
+app.post('/login', async (req,res) => {
+  const { username, password } = req.body
+
+  const token = jwt.sign({
+    user: username,
+    role: 'student'
+  }, 'very-strong-password', { expiresIn: '1H'});
+
+  res.send(token)
+})
+
 /*app.post('/register', (req, res) => {
   client.db("AfifBENR").collection("users").find
     ({
@@ -120,6 +154,7 @@ app.post('/login', (req, res) => {
   console.log(username, password);
 
   client.db('AfifBENR').collection('users').findOne({"username": username}).then((user) => {
+    console.log(user)
 
     if(bcrypt.compareSync(password, user.password) == true){
       res.send("login succes");
