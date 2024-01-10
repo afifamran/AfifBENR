@@ -62,7 +62,7 @@ app.get('/student', async (req, res) => {
       client.db('assign').collection("student").find({})
     }
   });
-  
+
   console.log(err)
   console.log(decode)
 });
@@ -73,7 +73,7 @@ app.post('/login', async (req,res) => {
   const token = jwt.sign({
     user: username,
     role: 'student'
-  }, 'very-strong-password', { expiresIn: '1H'});
+  }, 'very-strong-password', { expiresIn: '5m'});
 
   res.send(token)
 })
@@ -149,7 +149,7 @@ app.listen(port, () => {
 })*/
 
 //Hash 2
-app.post('/login', (req, res) => {
+/*app.post('/login', (req, res) => {
   const { username, password } = req.body;
   console.log(username, password);
 
@@ -162,7 +162,7 @@ app.post('/login', (req, res) => {
       res.send("login failed")
     }
   })
-})
+})*/
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
